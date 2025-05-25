@@ -1,17 +1,21 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import {
+  Avatar,
   Box,
+  Button,
+  Flex,
   Heading,
   Image,
-  Text,
-  Flex,
-  Avatar,
+  Text,  
 } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
+
 import data from '../data/events.json'; // ← bevat users, events, categories
 
 export const EventPage = () => {
   const { eventId } = useParams(); // Haalt event ID uit URL
+  const navigate = useNavigate(); // Voor navigatie terug naar home
 
 console.log("ID uit useParams():", eventId); 
 console.log("Alle events:", data.events);
@@ -53,10 +57,30 @@ console.log("Gevonden event:", event);
   }
 
   const creator = getUserById(event?.createdBy);  
+  const handleDelete = () => {
+    const confirmed = window.confirm('Weet je zeker dat je dit evenement wilt verwijderen?');
+  if (!confirmed) return;
+
+  // Hier zou normaal een fetch DELETE-call komen naar de backend.
+  // Aangezien je werkt met een lokale JSON, kunnen we alleen navigeren.
+  alert('Evenement verwijderd (simulatie).');
+  navigate('/');
+};
 
   return (
     <Box p={4}>
-      <Heading mb={4}>{event.title}</Heading>
+    
+      <Flex justify="space-between" align="center" mb={4}>
+  <Heading mb={0}>{event.title}</Heading>
+  <Flex gap={2}>
+    <Button colorScheme="blue" onClick={() => navigate(`/event/${eventId}/edit`)}>
+      Wijzig
+    </Button>
+    <Button colorScheme="red" onClick={handleDelete}>
+      Verwijderen
+    </Button>
+  </Flex>
+</Flex>
       <Image
         src={event.image || 'https://via.placeholder.com/800x300?text=Geen+afbeelding'}
         alt={event.title}

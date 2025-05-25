@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, FormControl, FormLabel, Input, Textarea, Button, FormErrorMessage, Select, Flex } from '@chakra-ui/react';
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, FormControl, FormLabel, Input, Textarea, Button, FormErrorMessage, Flex, CheckboxGroup, Checkbox, Stack } from '@chakra-ui/react';
 
 export const NewEventForm = ({ isOpen, onClose, onEventAdded, onCategoryAdded }) => {
   const [formData, setFormData] = useState({
@@ -51,13 +51,21 @@ export const NewEventForm = ({ isOpen, onClose, onEventAdded, onCategoryAdded })
     }));
   };
 
-  const handleCategoryChange = (e) => {
-    const selected = Array.from(e.target.selectedOptions)
-  .map(opt => opt.value)
-  .filter(val => /^\d+$/.test(val)) // Alleen numerieke waarden
-  .map(Number);
-    setFormData(prev => ({ ...prev, categoryIds: selected }));
+  const handleCategoryChange = (selected) => {
+    const cleanIds = selected
+    .map(Number)
+    .filter(id => !isNaN(id));
+
+  setFormData((prev) => ({
+    ...prev,
+    categoryIds: cleanIds
+  }));
 };
+//   setFormData((prev) => ({
+//     ...prev,
+//     categoryIds: selected.map(Number)
+//   }));
+// };
 
   const handleAddCategory = async () => {
     if (!newCategoryName.trim()) return;
@@ -73,7 +81,8 @@ export const NewEventForm = ({ isOpen, onClose, onEventAdded, onCategoryAdded })
       setCategories(prev => [...prev, saved]);
       setFormData(prev => ({
         ...prev,
-        categoryIds: [...prev.categoryIds, Number(saved.id)]
+        categoryIds: [...new Set([...prev.categoryIds, Number(saved.id)])]
+
       }));
       setNewCategoryName('');
       if (onCategoryAdded) onCategoryAdded(saved);
@@ -110,7 +119,7 @@ const newEvent = {
   startTime: start.toISOString(),
   endTime: end.toISOString(),
   createdBy: 1,
-  categoryIds: categoryIds.map(Number)
+  categoryIds: categoryIds.map(Number).filter(id => !isNaN(id)) // Zorg ervoor dat de IDs numeriek zijn
 };
 
     try {
@@ -196,11 +205,18 @@ const newEvent = {
 
           <FormControl mb="1rem">
             <FormLabel>Categorieën</FormLabel>
-            <Select multiple name="categoryIds" value={formData.categoryIds.map(String)} onChange={handleCategoryChange}>
-              {categories.map(cat => (
-                <option key={cat.id} value={cat.id}>{cat.name}</option>
-              ))}
-            </Select>
+              <CheckboxGroup
+    value={(formData.categoryIds || []).map(String)}
+    onChange={handleCategoryChange}
+  >
+    <Stack spacing={2}>
+      {categories.map((cat) => (
+        <Checkbox key={cat.id} value={String(cat.id)}>
+          {cat.name}
+        </Checkbox>
+      ))}
+    </Stack>
+  </CheckboxGroup>
           </FormControl>
 
           <FormControl mb="1rem">

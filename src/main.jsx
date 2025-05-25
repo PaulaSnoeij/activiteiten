@@ -5,9 +5,7 @@ import { EventPage } from './pages/EventPage';
 import { EventsPage } from './pages/EventsPage';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Root } from './components/Root';
-
-
-
+import { ChangeEventForm } from './components/ChangeEventForm';
 
 const router = createBrowserRouter([
   {
@@ -24,6 +22,11 @@ const router = createBrowserRouter([
         element: <EventPage />,
         // loader: postLoader,
         // action: addComment,
+      },
+      {
+          path: '/event/:eventId/edit',
+          element: <ChangeEventForm />,
+          // action: changeEvent,
       },
     ],
   },

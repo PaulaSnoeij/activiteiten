@@ -40,8 +40,8 @@
         2
       ],
       "location": "Blinded by the Lights Laser Tag, 15 Main St.",
-      "startTime": "2023-04-06T17:46:00.000Z",
-      "endTime": "2023-04-06T18:46:00.000Z"
+      "startTime": "2023-04-06T09:46:00.000Z",
+      "endTime": "2023-04-06T10:46:00.000Z"
     },
     {
       "id": "3",
@@ -50,12 +50,11 @@
       "description": "Hit that shuttle!",
       "image": "https://wincacademy.github.io/webpages/media/pexels-vladvictoria-2202685.jpg",
       "categoryIds": [
-        1,
-        2
+        1
       ],
       "location": "The Park",
-      "startTime": "2023-03-15T12:00:00.000Z",
-      "endTime": "2023-03-15T13:30:00.000Z"
+      "startTime": "2023-03-15T09:00:00.000Z",
+      "endTime": "2023-03-15T10:30:00.000Z"
     },
     {
       "id": "4",
@@ -85,7 +84,7 @@
     },
     {
       "id": "6",
-      "createdBy": 5,
+      "createdBy": 3,
       "title": "Board games night",
       "description": "Roll the dice and join the fun!",
       "image": "https://wincacademy.github.io/webpages/media/pexels-tima-miroshnichenko-6598746.jpg",
@@ -111,7 +110,7 @@
     },
     {
       "id": "8",
-      "createdBy": 6,
+      "createdBy": 2,
       "title": "Nature walk",
       "description": "Connect with nature and clear your mind.",
       "image": "https://wincacademy.github.io/webpages/media/hiking.png",
@@ -219,11 +218,11 @@
       "description": "test",
       "image": "test",
       "location": "test",
-      "startTime": "2025-05-12T08:00:00.000Z",
-      "endTime": "2025-06-25T13:00:00.000Z",
+      "startTime": "2025-05-12T06:00:00.000Z",
+      "endTime": "2025-06-25T11:00:00.000Z",
       "createdBy": 1,
       "categoryIds": [
-        7
+        2
       ]
     },
     {
@@ -232,11 +231,11 @@
       "description": "test",
       "image": "tst",
       "location": "www.tst.nl",
-      "startTime": "2025-01-01T11:00:00.000Z",
-      "endTime": "2025-01-01T14:00:00.000Z",
+      "startTime": "2025-01-01T10:00:00.000Z",
+      "endTime": "2025-01-01T13:00:00.000Z",
       "createdBy": 1,
       "categoryIds": [
-        8
+        5
       ]
     },
     {
@@ -250,6 +249,32 @@
       "createdBy": 1,
       "categoryIds": [
         9
+      ]
+    },
+    {
+      "id": "4203",
+      "title": "Karten",
+      "description": "Karten op het circuit van Drente",
+      "image": "C:/Downloads_deze_laptop/Winc Academy/Oefeningen klaar/Inleveropdrachten/React_Advanced/public/Images/Karten.jpg",
+      "location": "Uden",
+      "startTime": "2025-06-25T05:00:00.000Z",
+      "endTime": "2025-06-25T08:00:00.000Z",
+      "createdBy": 1,
+      "categoryIds": [
+        2
+      ]
+    },
+    {
+      "id": "4204",
+      "title": "Varen",
+      "description": "test",
+      "image": "www.test.nl",
+      "location": "Reeuwijk",
+      "startTime": "2025-05-24T13:00:00.000Z",
+      "endTime": "2025-05-24T16:00:00.000Z",
+      "createdBy": 1,
+      "categoryIds": [
+        6
       ]
     }
   ],
@@ -277,14 +302,6 @@
     {
       "id": "6",
       "name": "Varen"
-    },
-    {
-      "id": "7",
-      "name": "test"
-    },
-    {
-      "id": "8",
-      "name": "test"
     }
   ]
 }

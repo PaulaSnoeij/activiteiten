@@ -111,32 +111,30 @@ export const EventsPage = () => {
   boxShadow="md"
   _hover={{ boxShadow: 'lg' }}
 >
-  <Heading size="md" mb={2}>
-    {event.title}
-  </Heading>
-                  <Text fontSize="xl" fontWeight="bold">{event.title}</Text>
-                  <Text mt="0.5rem">{event.description}</Text>
-                  <Text mt="1rem" color="gray.500">
-                    Datum: {new Date(event.startTime).toLocaleDateString('nl-NL')}<br />
-                    Start: {new Date(event.startTime).toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' })}<br />
-                    Eind: {new Date(event.endTime).toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' })}
-                  </Text>
-                  <Text mt="0.5rem" fontWeight="bold" color="blue.500">
-                    Categorieën: {getCategoryNames(event.categoryIds)}
-                  </Text>
-                  {creator && (
-                    <Flex align="center" mt="1rem">
-                      <Avatar src={creator.image} name={creator.name} size="sm" mr="0.5rem" />
-                      <Text fontSize="sm" color="gray.700">Georganiseerd door {creator.name}</Text>
-                    </Flex>
-                  )}
-                </Box>
-              </Link>
-            </Box>
-          );
-        })}
-    </SimpleGrid>
 
+    <Text fontSize="xl" fontWeight="bold">{event.title}</Text>
+    <Text mt="0.5rem">{event.description}</Text>
+     <Text mt="1rem" color="gray.500">
+        Datum: {new Date(event.startTime).toLocaleDateString('nl-NL')}<br />
+        Start: {new Date(event.startTime).toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' })}<br />
+        Eind: {new Date(event.endTime).toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' })}            
+      </Text>
+      <Text mt="0.5rem" fontWeight="bold" color="blue.500">
+        Categorieën: {getCategoryNames(event.categoryIds)}
+      </Text>
+        {creator && (
+      <Flex align="center" mt="1rem">
+      <Avatar src={creator.image} name={creator.name} size="sm" mr="0.5rem" />
+      <Text fontSize="sm" color="gray.700">Georganiseerd door {creator.name}</Text>
+       </Flex>
+      )}
+      </Box>
+      </Link>        
+      </Box>      
+      );
+        })}          
+    </SimpleGrid>
+            
       {/* Nieuw formuliercomponent */}
       <NewEventForm
         isOpen={isOpen}
