@@ -1,4 +1,4 @@
-import { redirect } from 'react-router-dom';
+import { redirect, json } from 'react-router-dom';
 
 const BASE_URL = 'http://localhost:3000/events';
 
@@ -16,19 +16,23 @@ export async function loadEvent({ params }) {
   // Herstel afwijkende tijdsstructuur als die bestaat
   const isTimeOnly = (value) => typeof value === 'string' && /^\d{2}:\d{2}$/.test(value);
 
+  // Voeg fallback toe voor events met los datum/tijdformaat
   if (isTimeOnly(event.startTime) && event.date) {
     event.startTime = new Date(`${event.date}T${event.startTime}:00`).toISOString();
   }
 
-  if (isTimeOnly(event.endTime) && event.endDate) {
-    event.endTime = new Date(`${event.endDate}T${event.endTime}:00`).toISOString();
+  if (isTimeOnly(event.endTime)) {
+    const endDateToUse = event.endDate || event.date;
+    if (endDateToUse) {
+      event.endTime = new Date(`${endDateToUse}T${event.endTime}:00`).toISOString();
+    }
   }
 
   return event;
 }
 
 export async function updateEvent({ params, request }) {
-    const {eventId } = params;
+  const { eventId } = params;
   const formData = await request.formData();
 
   const title = formData.get('title');
@@ -40,13 +44,19 @@ export async function updateEvent({ params, request }) {
   const startTime = formData.get('startTime');
   const endTime = formData.get('endTime');
   const createdBy = Number(formData.get('userId'));
-const categoryIds = formData.getAll('categoryIds').map(Number);
+  const categoryIds = formData.getAll('categoryIds').map(Number);
 
   const startDateTime = new Date(`${date}T${startTime}`);
   const endDateTime = new Date(`${endDate}T${endTime}`);
 
+  // 🛑 Validatie: check of de datums geldig zijn
+  if (isNaN(startDateTime) || isNaN(endDateTime)) {
+    return json({ error: 'Ongeldige datum of tijd ingevoerd.' }, { status: 400 });
+  }
+
+  // 🛑 Validatie: eindtijd na starttijd
   if (startDateTime >= endDateTime) {
-    throw new Error('De eindtijd moet na de starttijd liggen.');
+    return json({ error: 'De eindtijd moet na de starttijd liggen.' }, { status: 400 });
   }
 
   const updatedEvent = {
@@ -60,7 +70,7 @@ const categoryIds = formData.getAll('categoryIds').map(Number);
     createdBy,
   };
 
-    const response = await fetch(`${BASE_URL}/${params.eventId}`, {
+  const response = await fetch(`${BASE_URL}/${eventId}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -68,9 +78,9 @@ const categoryIds = formData.getAll('categoryIds').map(Number);
     body: JSON.stringify(updatedEvent),
   });
 
-    if (!response.ok) {
+  if (!response.ok) {
     console.error('❌ Fout bij bijwerken evenement:', response.statusText);
-    throw new Error('Kon evenement niet bijwerken');
+    return json({ error: 'Kon evenement niet bijwerken' }, { status: 500 });
   }
 
   return redirect('/');

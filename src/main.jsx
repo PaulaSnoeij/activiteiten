@@ -6,6 +6,7 @@ import { EventsPage } from './pages/EventsPage';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Root } from './components/Root';
 import { ChangeEventForm } from './components/ChangeEventForm';
+import { loadEvent, updateEvent } from './loaders/updateEvent';
 
 const router = createBrowserRouter([
   {
@@ -15,18 +16,17 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <EventsPage />,
-        // loader: postListLoader,
       },
       {
         path: '/event/:eventId',
         element: <EventPage />,
-        // loader: postLoader,
-        // action: addComment,
       },
       {
-          path: '/event/:eventId/edit',
-          element: <ChangeEventForm />,
-          // action: changeEvent,
+        path: '/event/:eventId/edit',
+        element: <ChangeEventForm />,
+        loader: loadEvent,
+        action: updateEvent,
+        errorElement: <p>Fout bij laden of opslaan van het event.</p>,
       },
     ],
   },
@@ -37,5 +37,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <ChakraProvider>
       <RouterProvider router={router} />
     </ChakraProvider>
-  </React.StrictMode>,
+  </React.StrictMode>
 );

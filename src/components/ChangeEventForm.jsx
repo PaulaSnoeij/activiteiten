@@ -1,40 +1,25 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Box, 
-         Button,
-         Checkbox,
-         CheckboxGroup,
-         Flex,
-         FormControl,
-         FormErrorMessage,
-         FormLabel,
-         Heading, 
-         Input,
-         Stack,
-         Text,
-         Textarea, 
-        } from '@chakra-ui/react';
-import { parseISOToFormFields } from '../utils/dateTimeHelpers';
-import { useToast } from '@chakra-ui/react';
-
-const toast = useToast();
-
-// In je try-blok na succesvolle update:
-toast({
-  title: 'Evenement opgeslagen.',
-  description: 'Je wijzigingen zijn succesvol doorgevoerd.',
-  status: 'success',
-  duration: 3000,
-  isClosable: true,
-});
-
+import { useParams, useLoaderData, useActionData, Form } from 'react-router-dom';
+import {
+  Box,
+  Button,
+  Checkbox,
+  CheckboxGroup,
+  Flex,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Heading,
+  Input,
+  Stack,
+  Textarea,
+} from '@chakra-ui/react';
 
 export const ChangeEventForm = () => {
-  const { eventId } = useParams();
-//   const event = data.events.find((e) => String(e.id) === String(eventId));
-  const navigate = useNavigate();
+  useParams();
+  const event = useLoaderData(); // <-- geladen via loadEvent
+  const actionData = useActionData(); // <-- foutmeldingen van updateEvent
 
-  const [event, setEvent] = useState(null);
   const [categories, setCategories] = useState([]);
   const [formData, setFormData] = useState({
     title: '',
@@ -46,24 +31,29 @@ export const ChangeEventForm = () => {
     endDate: '',
     endTime: '',
     categoryIds: [],
+    userId: 1, // hardcoded, of haal uit context/auth
   });
 
- useEffect(() => {
-    fetch(`http://localhost:3000/events/${eventId}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setEvent(data);
+  useEffect(() => {
+    if (event) {
+      const start = new Date(event.startTime);
+      const end = new Date(event.endTime);
 
-setFormData({
-  ...data,
-  ...parseISOToFormFields(data.startTime, data.endTime),
-});
+      setFormData({
+        title: event.title || '',
+        description: event.description || '',
+        image: event.image || '',
+        location: event.location || '',
+        date: start.toISOString().slice(0, 10),
+        startTime: start.toISOString().slice(11, 16),
+        endDate: end.toISOString().slice(0, 10),
+        endTime: end.toISOString().slice(11, 16),
+        categoryIds: event.categoryIds || [],
+        userId: event.createdBy || 1,
+      });
+    }
+  }, [event]);
 
-      })
-      .catch((err) => console.error('Fout bij ophalen evenement:', err));
-  }, [eventId]);
-
-  // Haal categorieën op
   useEffect(() => {
     fetch('http://localhost:3000/categories')
       .then((res) => res.json())
@@ -76,68 +66,25 @@ setFormData({
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log('Formulier verzonden met data:', formData);
-
-    const { date, endDate, startTime, endTime } = formData;
-    const start = new Date(`${date}T${startTime}`);
-    const end = new Date(`${endDate || date}T${endTime}`);
-
-    if (start >= end) {
-      alert('De eindtijd moet na de starttijd liggen.');
-      return;
-    }
-    
-    
-    const updatedEvent = {
-      ...event,
-      title: formData.title,
-      description: formData.description,
-      image: formData.image,
-      location: formData.location,
-      startTime: start.toISOString(),
-      endTime: end.toISOString(),
-      categoryIds: formData.categoryIds.filter((id) => !isNaN(id)),
-    };
-
-    try {
-      const response = await fetch(`http://localhost:3000/events/${eventId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updatedEvent),
-      });
-
-      if (!response.ok) throw new Error('Fout bij bijwerken event');
-
-      alert('Evenement succesvol bijgewerkt!');
-      navigate('/');
-    } catch (err) {
-      console.error('Fout bij updaten:', err);
-      alert('Er ging iets mis bij het opslaan: ' + err.message);
-    }
+  const handleCategoryChange = (selected) => {
+    setFormData((prev) => ({ ...prev, categoryIds: selected.map(Number) }));
   };
 
-  if (!event) {
-    return <Text>Evenement wordt geladen...</Text>;
-  }
-    // Hier zou je een update-logica kunnen toevoegen (API-call, file write, etc.)
-//   };
-
-
-//   if (!event) {
-//     return <Text>Evenement niet gevonden.</Text>;
-//   }
-
-return (
+  return (
     <Box p={4}>
       <Heading mb={4}>Wijzig Evenement: {event.title}</Heading>
-      <form onSubmit={handleSubmit}>
-        <FormControl mb="1rem" isRequired isInvalid={!formData.title}>
+
+      {actionData?.error && (
+        <Box mb={4} color="red.500" fontWeight="semibold">
+          ⚠️ {actionData.error}
+        </Box>
+      )}
+
+      <Form method="post">
+        <FormControl mb={4} isRequired isInvalid={!formData.title}>
           <FormLabel>Titel</FormLabel>
           <Input name="title" value={formData.title} onChange={handleChange} />
-            {!formData.title && <FormErrorMessage>Verplicht veld</FormErrorMessage>}
+          {!formData.title && <FormErrorMessage>Verplicht veld</FormErrorMessage>}
         </FormControl>
 
         <FormControl mb={4}>
@@ -145,22 +92,22 @@ return (
           <Input name="image" value={formData.image} onChange={handleChange} />
         </FormControl>
 
-         <FormControl mb="1rem" isRequired isInvalid={!formData.description}>
+        <FormControl mb={4} isRequired isInvalid={!formData.description}>
           <FormLabel>Beschrijving</FormLabel>
           <Textarea name="description" value={formData.description} onChange={handleChange} />
         </FormControl>
 
-        <FormControl mb="1rem" isRequired isInvalid={!formData.location}>
+        <FormControl mb={4} isRequired isInvalid={!formData.location}>
           <FormLabel>Locatie</FormLabel>
           <Input name="location" value={formData.location} onChange={handleChange} />
         </FormControl>
 
- <FormControl mb="1rem" isRequired>
+        <FormControl mb={4} isRequired>
           <FormLabel>Startdatum</FormLabel>
           <Input type="date" name="date" value={formData.date} onChange={handleChange} />
         </FormControl>
 
-        <Flex gap="1rem" mb="1rem">
+        <Flex gap="1rem" mb={4}>
           <FormControl isRequired>
             <FormLabel>Begintijd</FormLabel>
             <Input type="time" name="startTime" value={formData.startTime} onChange={handleChange} />
@@ -171,44 +118,39 @@ return (
           </FormControl>
         </Flex>
 
-        <FormControl mb="1rem">
+        <FormControl mb={4}>
           <FormLabel>Einddatum (optioneel)</FormLabel>
           <Input type="date" name="endDate" value={formData.endDate} onChange={handleChange} />
         </FormControl>
 
-        <FormControl mb="1rem">
+        <FormControl mb={4}>
           <FormLabel>Categorieën</FormLabel>
           <CheckboxGroup
             colorScheme="blue"
-            value={(formData.categoryIds || []).map(String)}
-            onChange={(selected) =>
-              setFormData((prev) => ({
-                ...prev,
-                categoryIds: selected.map(Number),
-              }))
-            }
+            value={formData.categoryIds.map(String)}
+            onChange={handleCategoryChange}
           >
             <Stack spacing={2}>
               {categories.map((cat) => (
-            <Checkbox key={cat.id} value={String(cat.id)}>
-          {cat.name}
-        </Checkbox>
-      ))}
-    </Stack>
-  </CheckboxGroup>
-          {/* <Select multiple value={formData.categoryIds.map(String)} onChange={handleCategoryChange}>
-            {categories.map((cat) => (
-              <option key={cat.id} value={cat.id}>
-                {cat.name}
-              </option>
-            ))}
-          </Select> */}
+                <Checkbox key={cat.id} value={String(cat.id)}>
+                  {cat.name}
+                </Checkbox>
+              ))}
+            </Stack>
+          </CheckboxGroup>
         </FormControl>
+
+        <input type="hidden" name="userId" value={formData.userId} />
+        <input type="hidden" name="categoryIds" value={formData.categoryIds.join(',')} />
+
+        {formData.categoryIds.map((id) => (
+          <input key={id} type="hidden" name="categoryIds" value={id} />
+        ))}
 
         <Button type="submit" colorScheme="blue">
           Opslaan
         </Button>
-      </form>
+      </Form>
     </Box>
   );
 };

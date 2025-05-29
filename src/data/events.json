@@ -35,14 +35,13 @@
       "description": "Let's play laser tag!",
       "image": "https://wincacademy.github.io/webpages/media/lasertag.jpg",
       "location": "Blinded by the Lights Laser Tag, 15 Main St.",
-      "date": "2023-04-05",
-      "endDate": "",
-      "startTime": "05:46",
-      "endTime": "06:46",
+      "startTime": "2023-04-05T01:46:00.000Z",
+      "endTime": "2023-04-05T02:46:00.000Z",
       "categoryIds": [
+        2,
         2
       ],
-      "userId": "2",
+      "createdBy": 1,
       "id": "2"
     },
     {
@@ -50,14 +49,13 @@
       "description": "Hit that shuttle!",
       "image": "https://wincacademy.github.io/webpages/media/pexels-vladvictoria-2202685.jpg",
       "location": "The Park",
-      "date": "2023-03-16",
-      "endDate": "",
-      "startTime": "09:00",
-      "endTime": "10:30",
+      "startTime": "2023-03-16T07:00:00.000Z",
+      "endTime": "2023-03-16T08:30:00.000Z",
       "categoryIds": [
+        1,
         1
       ],
-      "userId": 2,
+      "createdBy": 1,
       "id": "3"
     },
     {
@@ -106,7 +104,8 @@
       "description": "Savor the soothing flavors of herbal teas.",
       "image": "https://wincacademy.github.io/webpages/media/pexels-viktoria-alipatova-1083711-2130137.jpg",
       "categoryIds": [
-        3
+        3,
+        4
       ],
       "location": "Cozy Tea House",
       "startTime": "2023-03-17T15:00:00.000Z",
@@ -306,6 +305,21 @@
       "categoryIds": [
         3
       ]
+    },
+    {
+      "title": "test",
+      "description": "test",
+      "image": "testlnl",
+      "location": "test",
+      "startTime": "2025-05-29T11:00:00.000Z",
+      "endTime": "2025-05-29T14:00:00.000Z",
+      "categoryIds": [
+        null,
+        3,
+        5
+      ],
+      "createdBy": 1,
+      "id": "23"
     }
   ],
   "categories": [
