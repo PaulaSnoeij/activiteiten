@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, FormControl, FormLabel, Input, Textarea, Button, FormErrorMessage, Flex, CheckboxGroup, Checkbox, Stack } from '@chakra-ui/react';
+import { formFieldsToISO } from '../utils/dateTimeHelpers';
+
 
 export const NewEventForm = ({ isOpen, onClose, onEventAdded, onCategoryAdded }) => {
   const [formData, setFormData] = useState({
@@ -102,25 +104,30 @@ export const NewEventForm = ({ isOpen, onClose, onEventAdded, onCategoryAdded })
       return;
     }
 
-    const start = new Date(`${date}T${startTime}`);
-    const end = new Date(`${endDate || date}T${endTime}`);
+const { startTime: isoStart, endTime: isoEnd } = formFieldsToISO(
+  date,
+  startTime,
+  endDate || date,
+  endTime
+);
 
-    if (start >= end) {
-      alert("De eindtijd moet na de begintijd liggen.");
-      return;
-    }
+if (new Date(isoStart) >= new Date(isoEnd)) {
+  alert("De eindtijd moet na de begintijd liggen.");
+  return;
+}
 
 const newEvent = {
-  id: await getNextNumericId(), // <-- hier voeg je het ID toe
+  id: await getNextNumericId(),
   title,
   description,
   image,
   location,
-  startTime: start.toISOString(),
-  endTime: end.toISOString(),
+  startTime: isoStart,
+  endTime: isoEnd,
   createdBy: 1,
-  categoryIds: categoryIds.map(Number).filter(id => !isNaN(id)) // Zorg ervoor dat de IDs numeriek zijn
+  categoryIds: categoryIds.map(Number).filter(id => !isNaN(id))
 };
+
 
     try {
       const response = await fetch("http://localhost:3000/events", {

@@ -104,7 +104,7 @@ export const EventsPage = () => {
             return (
               <Box
                 as={Link}
-                to={`/events/${event.id}`}
+                to={`/event/${event.id}`}
                 key={event.id}
                 borderWidth="1px"
                 borderRadius="lg"

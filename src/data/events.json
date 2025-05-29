@@ -31,30 +31,34 @@
       "endTime": "2023-03-10T19:00:00.000Z"
     },
     {
-      "id": "2",
-      "createdBy": 1,
       "title": "Laser Tag mania",
       "description": "Let's play laser tag!",
       "image": "https://wincacademy.github.io/webpages/media/lasertag.jpg",
+      "location": "Blinded by the Lights Laser Tag, 15 Main St.",
+      "date": "2023-04-05",
+      "endDate": "",
+      "startTime": "05:46",
+      "endTime": "06:46",
       "categoryIds": [
         2
       ],
-      "location": "Blinded by the Lights Laser Tag, 15 Main St.",
-      "startTime": "2023-04-06T09:46:00.000Z",
-      "endTime": "2023-04-06T10:46:00.000Z"
+      "userId": "2",
+      "id": "2"
     },
     {
-      "id": "3",
-      "createdBy": 2,
       "title": "Badminton game",
       "description": "Hit that shuttle!",
       "image": "https://wincacademy.github.io/webpages/media/pexels-vladvictoria-2202685.jpg",
+      "location": "The Park",
+      "date": "2023-03-16",
+      "endDate": "",
+      "startTime": "09:00",
+      "endTime": "10:30",
       "categoryIds": [
         1
       ],
-      "location": "The Park",
-      "startTime": "2023-03-15T09:00:00.000Z",
-      "endTime": "2023-03-15T10:30:00.000Z"
+      "userId": 2,
+      "id": "3"
     },
     {
       "id": "4",
@@ -148,7 +152,7 @@
       ]
     },
     {
-      "id": "65c8",
+      "id": "11",
       "title": "Hiken in de bossen",
       "description": "Hiken en picknicken in de Apeldoornse bossen",
       "image": "https://wincacademy.github.io/webpages/media/hiking.png",
@@ -161,7 +165,7 @@
       ]
     },
     {
-      "id": "d5f2",
+      "id": "12",
       "title": "Titel",
       "description": "Beschrijving",
       "image": "www.test.nl",
@@ -174,7 +178,7 @@
       ]
     },
     {
-      "id": "4199",
+      "id": "13",
       "title": "test2",
       "description": "test",
       "image": "www.test3.nl",
@@ -187,7 +191,7 @@
       ]
     },
     {
-      "id": "d331",
+      "id": "14",
       "title": "Test",
       "description": "Tst",
       "image": "www.test.nl",
@@ -200,7 +204,7 @@
       ]
     },
     {
-      "id": "c893",
+      "id": "15",
       "title": "test 4",
       "description": "test4",
       "image": "test.nl",
@@ -213,7 +217,7 @@
       ]
     },
     {
-      "id": "4200",
+      "id": "16",
       "title": "test",
       "description": "test",
       "image": "test",
@@ -226,7 +230,7 @@
       ]
     },
     {
-      "id": "4201",
+      "id": "17",
       "title": "test1000",
       "description": "test",
       "image": "tst",
@@ -239,7 +243,7 @@
       ]
     },
     {
-      "id": "4202",
+      "id": "18",
       "title": "test2000",
       "description": "test",
       "image": "www.test.nl",
@@ -252,7 +256,7 @@
       ]
     },
     {
-      "id": "4203",
+      "id": "19",
       "title": "Karten",
       "description": "Karten op het circuit van Drente",
       "image": "C:/Downloads_deze_laptop/Winc Academy/Oefeningen klaar/Inleveropdrachten/React_Advanced/public/Images/Karten.jpg",
@@ -265,16 +269,42 @@
       ]
     },
     {
-      "id": "4204",
+      "id": "20",
       "title": "Varen",
       "description": "test",
       "image": "www.test.nl",
       "location": "Reeuwijk",
-      "startTime": "2025-05-24T13:00:00.000Z",
-      "endTime": "2025-05-24T16:00:00.000Z",
+      "startTime": "2025-05-24T05:00:00.000Z",
+      "endTime": "2025-05-24T08:00:00.000Z",
+      "categoryIds": [
+        6,
+        3
+      ]
+    },
+    {
+      "id": "21",
+      "title": "test",
+      "description": "test",
+      "image": "www.test.nl",
+      "location": "test",
+      "startTime": "2025-05-30T10:00:00.000Z",
+      "endTime": "2025-05-30T13:00:00.000Z",
       "createdBy": 1,
       "categoryIds": [
-        6
+        1
+      ]
+    },
+    {
+      "id": "22",
+      "title": "test12",
+      "description": "test",
+      "image": "www.test.nl",
+      "location": "test",
+      "startTime": "2025-05-30T10:00:00.000Z",
+      "endTime": "2025-05-30T13:00:00.000Z",
+      "createdBy": 1,
+      "categoryIds": [
+        3
       ]
     }
   ],

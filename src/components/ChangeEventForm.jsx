@@ -14,6 +14,19 @@ import { Box,
          Text,
          Textarea, 
         } from '@chakra-ui/react';
+import { parseISOToFormFields } from '../utils/dateTimeHelpers';
+import { useToast } from '@chakra-ui/react';
+
+const toast = useToast();
+
+// In je try-blok na succesvolle update:
+toast({
+  title: 'Evenement opgeslagen.',
+  description: 'Je wijzigingen zijn succesvol doorgevoerd.',
+  status: 'success',
+  duration: 3000,
+  isClosable: true,
+});
 
 
 export const ChangeEventForm = () => {
@@ -34,37 +47,18 @@ export const ChangeEventForm = () => {
     endTime: '',
     categoryIds: [],
   });
-  
-  
-//   const [formData, setFormData] = useState(() => ({
-//     title: event?.title || '',
-//     image: event?.image || '',
-//     description: event?.description || '',
-//     location: event?.location || '',
-//     startTime: event?.startTime || '',
-//     endTime: event?.endTime || '',
-//     categoryIds: event?.categoryIds?.map(String) || [],
-//   }));
 
  useEffect(() => {
     fetch(`http://localhost:3000/events/${eventId}`)
       .then((res) => res.json())
       .then((data) => {
         setEvent(data);
-        const start = new Date(data.startTime);
-        const end = new Date(data.endTime);
 
-        setFormData({
-          title: data.title,
-          description: data.description,
-          image: data.image,
-          location: data.location,
-          date: start.toISOString().slice(0, 10),
-          endDate: end.toISOString().slice(0, 10),
-          startTime: start.toISOString().slice(11, 16),
-          endTime: end.toISOString().slice(11, 16),
-          categoryIds: data.categoryIds || [],
-        });
+setFormData({
+  ...data,
+  ...parseISOToFormFields(data.startTime, data.endTime),
+});
+
       })
       .catch((err) => console.error('Fout bij ophalen evenement:', err));
   }, [eventId]);
@@ -81,17 +75,6 @@ export const ChangeEventForm = () => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-
-//   const handleCategoryChange = (selected) => {
-//     setFormData((prev) => ({ ...prev, categoryIds: selected }));
-//   };
-  //   const handleCategoryChange = (e) => {
-  //   const selected = Array.from(e.target.selectedOptions)
-  //     .map((opt) => opt.value)
-  //     .filter((val) => /^\d+$/.test(val))
-  //     .map(Number);
-  //   setFormData((prev) => ({ ...prev, categoryIds: selected }));
-  // };
 
 
   const handleSubmit = async (e) => {
@@ -116,7 +99,7 @@ export const ChangeEventForm = () => {
       location: formData.location,
       startTime: start.toISOString(),
       endTime: end.toISOString(),
-      categoryIds: formData.categoryIds,
+      categoryIds: formData.categoryIds.filter((id) => !isNaN(id)),
     };
 
     try {
